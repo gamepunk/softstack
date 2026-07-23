@@ -1,0 +1,10 @@
+---
+import { getEntry } from 'astro:content';
+import SoftwareCard from './SoftwareCard.astro';
+
+interface Props { slug: string }
+const { slug } = Astro.props;
+const entry = await getEntry('software', slug);
+---
+
+{entry && <SoftwareCard entry={entry} />}

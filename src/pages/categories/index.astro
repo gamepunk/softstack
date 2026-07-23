@@ -1,0 +1,36 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const categoryNames: Record<string, string> = {
+  productivity:'Productivity', developer:'Developer Tools', design:'Design', writing:'Writing',
+  utility:'Utilities', media:'Media', communication:'Communication', security:'Security', other:'Other'
+};
+
+const all = await getCollection('software', ({ data }) => !data.draft && data.type === 'gui');
+const categories = [...new Set(all.map(p => p.data.category))].sort();
+const counts = Object.fromEntries(categories.map(c => [c, all.filter(p => p.data.category === c && !p.data.draft).length]));
+---
+
+<Layout title="Categories — SoftStack" description="Browse free, legit software by category.">
+  <nav class="breadcrumb">
+    <a href="/">Home</a> <span>/</span>
+    Categories
+  </nav>
+
+  <div class="hero" style="padding-top:var(--gap)">
+    <h1>Categories</h1>
+    <p>Find the right tool for the job.</p>
+  </div>
+
+  <div class="card-grid">
+    {categories.map(c => (
+      <a href={`/categories/${c}/`} class="card" style="text-decoration:none;color:var(--text)">
+        <div class="card-body" style="padding:var(--gap-lg)">
+          <h3 style="margin:0;font-size:1.1rem">{categoryNames[c] ?? c}</h3>
+          <p class="tagline" style="margin-top:.3rem">{counts[c]} {counts[c] === 1 ? 'tool' : 'tools'}</p>
+        </div>
+      </a>
+    ))}
+  </div>
+</Layout>

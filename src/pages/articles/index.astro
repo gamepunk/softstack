@@ -1,0 +1,52 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const articles = (await getCollection('articles', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const categoryLabels: Record<string, string> = {
+  tutorial: 'Tutorial', roundup: 'Roundup', guide: 'Guide'
+};
+---
+
+<Layout title="Articles — SoftStack" description="Tutorials, roundups, and guides for discovering and using great software.">
+  <nav class="breadcrumb">
+    <a href="/">Home</a> <span>/</span>
+    Articles
+  </nav>
+
+  <div class="hero" style="padding-top:0;text-align:left">
+    <h1>Articles</h1>
+    <p style="margin-left:0">Tutorials, roundups, and guides for discovering and using great software.</p>
+  </div>
+
+  <div class="article-list">
+    {articles.map(a => (
+      <a href={`/articles/${a.id}/`} class="article-card">
+        <div class="article-meta-top">
+          <span class="badge badge-category">{categoryLabels[a.data.category]}</span>
+          <time>{a.data.date.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' })}</time>
+        </div>
+        <h2>{a.data.title}</h2>
+        <p>{a.data.description}</p>
+        {a.data.tags.length > 0 && (
+          <div class="article-tags">
+            {a.data.tags.map(t => <span class="article-tag">{t}</span>)}
+          </div>
+        )}
+      </a>
+    ))}
+  </div>
+</Layout>
+
+<style>
+  .article-list{display:flex;flex-direction:column;gap:var(--gap)}
+  .article-card{display:block;padding:var(--gap-lg);background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);text-decoration:none;color:var(--text);transition:all .2s}
+  .article-card:hover{border-color:var(--accent);box-shadow:var(--shadow)}
+  .article-card h2{font-size:1.15rem;margin:var(--gap-sm) 0 4px;line-height:1.35}
+  .article-card p{font-size:.85rem;margin:0 0 var(--gap-sm)}
+  .article-meta-top{display:flex;gap:var(--gap-sm);align-items:center;font-size:.72rem;color:var(--text-tertiary)}
+  .article-tags{display:flex;gap:4px;flex-wrap:wrap}
+  .article-tag{font-size:.65rem;padding:2px 7px;border-radius:99px;background:var(--border);color:var(--text-secondary)}
+</style>

@@ -1,0 +1,115 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+interface Props { title: string; description: string; image?: string }
+const { title, description, image } = Astro.props;
+---
+
+<html lang="en">
+<head><BaseHead {title} {description} {image} /></head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="header-logo">🧩 SoftStack</a>
+      <nav class="header-nav">
+        <a href="/software/">All</a>
+        <a href="/categories/">Categories</a>
+        <a href="/articles/">Articles</a>
+        <a href="/about/">About</a>
+      </nav>
+      <div class="header-search" id="header-search">
+        <button class="search-trigger" id="search-trigger" aria-label="Search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <span class="search-hint">Search</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Search overlay -->
+  <div class="search-overlay" id="search-overlay">
+    <div class="search-modal">
+      <div class="search-input-wrap">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" class="search-input" id="search-input" placeholder="Search apps..." autofocus />
+        <kbd class="search-kbd">esc</kbd>
+      </div>
+      <div class="search-results" id="search-results"></div>
+      <div class="search-empty" id="search-empty">Type to search {0} apps</div>
+    </div>
+  </div>
+
+  <main style="max-width:var(--wide);margin:0 auto;padding:var(--gap-lg) var(--gap-lg)"><slot /></main>
+
+  <footer class="site-footer">
+    <p>Curated with care, shared with love — only free, legit, and genuinely useful GUI apps.</p>
+    <div class="footer-links">
+      <a href="/about/">About</a>
+      <span>·</span>
+      <a href="/terms/">Terms</a>
+      <span>·</span>
+      <a href="/privacy/">Privacy</a>
+      <span>·</span>
+      <a href="/sitemap-index.xml">Sitemap</a>
+    </div>
+    <a href="https://github.com/billow/softstack" class="badge-awesome" target="_blank" rel="noopener" title="Built with the awesome manifesto in mind">
+      <img src="https://awesome.re/badge-flat.svg" alt="Awesome" width="88" height="20" loading="lazy" />
+    </a>
+  </footer>
+
+  <script>
+    let apps = [];
+    const overlay = document.getElementById('search-overlay')!;
+    const input = document.getElementById('search-input') as HTMLInputElement;
+    const results = document.getElementById('search-results')!;
+    const empty = document.getElementById('search-empty')!;
+    const trigger = document.getElementById('search-trigger')!;
+
+    // Load index
+    fetch('/search-index').then(r => r.json()).then(data => {
+      apps = data;
+      empty.textContent = `Type to search ${apps.length} apps`;
+    });
+
+    // Open/close
+    trigger.addEventListener('click', () => { overlay.classList.add('open'); setTimeout(() => input.focus(), 100); });
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeSearch(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeSearch();
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); overlay.classList.add('open'); setTimeout(() => input.focus(), 100); }
+    });
+
+    function closeSearch() { overlay.classList.remove('open'); input.value = ''; results.innerHTML = ''; empty.style.display = ''; }
+
+    // Search
+    const catNames = { productivity:'Productivity', developer:'Dev Tools', design:'Design', writing:'Writing', utility:'Utilities', media:'Media', communication:'Communication', security:'Security' };
+    const priceNames = { free:'Free', freemium:'Freemium', 'open-source':'Open Source' };
+    const plats = { mac:'', windows:'⊞', linux:'🐧', ios:'📱', android:'🤖', web:'🌐' };
+
+    input.addEventListener('input', () => {
+      const q = input.value.toLowerCase().trim();
+      if (!q) { results.innerHTML = ''; empty.style.display = ''; return; }
+      const matched = apps.filter(a =>
+        a.name.toLowerCase().includes(q) ||
+        a.tagline.toLowerCase().includes(q) ||
+        a.category.toLowerCase().includes(q)
+      ).slice(0, 8);
+
+      if (!matched.length) { results.innerHTML = '<div class="search-no-results">No results</div>'; empty.style.display = 'none'; return; }
+      empty.style.display = 'none';
+      results.innerHTML = matched.map(a => `
+        <a href="/software/${a.slug}/" class="search-result">
+          <span class="search-result-icon">${a.name.charAt(0)}</span>
+          <div class="search-result-body">
+            <div class="search-result-name">${a.name} ${a.featured ? '<span class="scard-flag" style="font-size:.5rem;vertical-align:middle">Hot</span>' : ''}</div>
+            <div class="search-result-tagline">${a.tagline}</div>
+            <div class="search-result-meta">
+              <span class="badge badge-category">${catNames[a.category] || a.category}</span>
+              <span class="badge badge-price">${priceNames[a.price] || a.price}</span>
+            </div>
+          </div>
+        </a>
+      `).join('');
+    });
+  </script>
+</body>
+</html>

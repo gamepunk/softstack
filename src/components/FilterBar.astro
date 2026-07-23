@@ -1,0 +1,72 @@
+<div class="filter-bar" id="filter-bar">
+  <div class="filter-group" data-group="platform">
+    <button class="filter-pill active" data-value="">All</button>
+    <button class="filter-pill" data-value="mac">Mac</button>
+    <button class="filter-pill" data-value="windows">Win</button>
+    <button class="filter-pill" data-value="linux">Linux</button>
+    <button class="filter-pill" data-value="ios">iOS</button>
+    <button class="filter-pill" data-value="android">Android</button>
+    <button class="filter-pill" data-value="web">Web</button>
+  </div>
+  <div class="filter-group" data-group="sort">
+    <button class="filter-pill active" data-value="">Featured</button>
+    <button class="filter-pill" data-value="name">A–Z</button>
+  </div>
+</div>
+
+<script>
+  function applyFilters() {
+    const activePlatform = document.querySelector('#filter-bar .filter-group[data-group="platform"] .filter-pill.active')?.dataset.value || '';
+    const cards = document.querySelectorAll('.scard');
+    const counter = document.getElementById('filter-count');
+
+    let visible = 0;
+    cards.forEach(card => {
+      const platforms = card.dataset.platforms || '';
+      if (!activePlatform || platforms.includes(activePlatform)) {
+        card.style.display = '';
+        visible++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    if (counter) counter.textContent = visible;
+  }
+
+  // Platform filtering
+  document.querySelectorAll('.filter-group[data-group="platform"] .filter-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-group[data-group="platform"] .filter-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilters();
+    });
+  });
+
+  // Sort
+  document.querySelectorAll('.filter-group[data-group="sort"] .filter-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-group[data-group="sort"] .filter-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const sort = btn.dataset.value;
+      const grid = document.querySelector('.card-grid');
+      if (!grid) return;
+      const cards = Array.from(grid.querySelectorAll('.scard'));
+      if (sort === 'name') {
+        cards.sort((a, b) => {
+          const na = (a.querySelector('h3')?.textContent || '').toLowerCase();
+          const nb = (b.querySelector('h3')?.textContent || '').toLowerCase();
+          return na.localeCompare(nb);
+        });
+      } else {
+        // Featured first
+        cards.sort((a, b) => {
+          const fa = a.querySelector('.scard-flag') ? 1 : 0;
+          const fb = b.querySelector('.scard-flag') ? 1 : 0;
+          return fb - fa;
+        });
+      }
+      cards.forEach(c => grid.appendChild(c));
+    });
+  });
+</script>
