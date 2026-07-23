@@ -14,7 +14,7 @@ AutoHotkey lets you automate anything on Windows with simple scripts. Here's how
 
 Install AutoHotkey. Right-click on desktop → New → AutoHotkey Script. Name it `myscript.ahk`. Right-click → Edit Script. Add:
 
-```autohotkey
+```text
 #z::MsgBox "Hello, World!"
 ```
 
@@ -22,7 +22,7 @@ Double-click the script to run it. Press Win+Z. A message box appears. You've wr
 
 ## Useful Hotkeys
 
-```autohotkey
+```text
 ; Remap CapsLock to Escape
 CapsLock::Esc
 
@@ -38,7 +38,7 @@ MButton::WinClose "A"
 
 ## Text Expansion
 
-```autohotkey
+```text
 ::@@::myemail@example.com
 ::addr::123 Main Street, City, ST 12345
 ::sig::Best regards,{Enter}Your Name
@@ -48,7 +48,7 @@ Type `@@` followed by space or punctuation, and it expands to your email. Type `
 
 ## Window Management
 
-```autohotkey
+```text
 ; Win+Left to snap window left
 #Left::WinMove "A",, 0, 0, A_ScreenWidth/2, A_ScreenHeight
 
