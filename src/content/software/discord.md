@@ -21,5 +21,6 @@ type: gui
 price: free
 version: "0.0.402"
 download: https://dl.discordapp.net/apps/osx/0.0.402/Discord.dmg
+logo: /images/discord.png
 featured: true
 ---

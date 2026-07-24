@@ -12,6 +12,7 @@ type: gui
 price: open-source
 version: "153.0"
 download: https://download-installer.cdn.mozilla.net/pub/firefox/releases/153.0/mac/en-US/Firefox%20153.0.dmg
+logo: /images/firefox.png
 featured: true
 install:
   homebrew: brew install --cask firefox

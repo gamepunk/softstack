@@ -12,6 +12,7 @@ type: gui
 price: open-source
 version: "3.0.23"
 download: https://get.videolan.org/vlc/3.0.23/macosx/vlc-3.0.23-arm64.dmg
+logo: /images/vlc.png
 featured: true
 install:
   homebrew: brew install --cask vlc

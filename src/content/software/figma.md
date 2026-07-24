@@ -18,5 +18,5 @@ price: freemium
 version: "126.6.14"
 download: https://desktop.figma.com/mac-arm/Figma-126.6.14.zip
 featured: true
-logo: /images/figma.jpg
+logo: /images/figma.png
 ---

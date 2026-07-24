@@ -15,13 +15,13 @@ const categoryIcons: Record<string, string> = {
   productivity:'fa-solid fa-bolt', developer:'fa-solid fa-code', design:'fa-solid fa-palette', writing:'fa-solid fa-pen',
   utility:'fa-solid fa-toolbox', media:'fa-solid fa-play', communication:'fa-solid fa-comment', security:'fa-solid fa-shield', other:'fa-solid fa-ellipsis'
 };
-const platformNames: Record<string, string> = { mac:'macOS', windows:'Windows', linux:'Linux', web:'Web' };
-const platformIcons: Record<string, string> = { mac:'fa-brands fa-apple', windows:'fa-brands fa-windows', linux:'fa-brands fa-linux', web:'fa-solid fa-globe' };
+const platformNames: Record<string, string> = { mac:'macOS', windows:'Windows', linux:'Linux', ios:'iOS', android:'Android', web:'Web' };
+const platformIcons: Record<string, string> = { mac:'fa-brands fa-apple', windows:'fa-brands fa-windows', linux:'fa-brands fa-linux', ios:'fa-brands fa-app-store-ios', android:'fa-brands fa-android', web:'fa-solid fa-globe' };
 
 const all = (await getCollection('software')).filter(p => !p.data.draft && p.data.type === 'gui');
 const categories = [...new Set(all.map(p => p.data.category))].sort();
 const countByCat = (cat: string) => all.filter(p => p.data.category === cat).length;
-const platforms = ['mac', 'windows', 'linux', 'web'] as const;
+const platforms = ['mac', 'windows', 'linux', 'ios', 'android', 'web'] as const;
 const countByPlatform = (p: string) => all.filter(s => s.data.platforms.includes(p as any)).length;
 ---
 

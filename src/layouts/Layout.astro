@@ -11,7 +11,7 @@ const isActive = (base: string) => path === base || (base !== '/' && path.starts
 <body>
   <header class="site-header">
     <div class="header-inner">
-      <a href="/" class="header-logo"><img src="/logo.svg" alt="SoftStack" style="height:24px;width:auto" /></a>
+      <a href="/" class="header-logo"><img src="/logo.svg" alt="SoftStack" style="height:22px;width:auto" /></a>
       <nav class="header-nav">
         <a href="/software/" class={isActive('/software') ? 'active' : ''}>All Apps</a>
         <a href="/categories/" class={isActive('/categories') ? 'active' : ''}>Categories</a>
@@ -21,14 +21,13 @@ const isActive = (base: string) => path === base || (base !== '/' && path.starts
       <div class="header-search" id="header-search">
         <button class="search-trigger" id="search-trigger" aria-label="Search">
           <i class="fa-solid fa-magnifying-glass"></i>
-          <span class="search-hint">Search apps</span>
+          <span class="search-hint">Search apps...</span>
           <span class="search-kbd-hint">⌘K</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Search overlay -->
   <div class="search-overlay" id="search-overlay">
     <div class="search-modal">
       <div class="search-input-wrap">
@@ -37,7 +36,7 @@ const isActive = (base: string) => path === base || (base !== '/' && path.starts
         <kbd class="search-kbd">esc</kbd>
       </div>
       <div class="search-results" id="search-results"></div>
-      <div class="search-empty" id="search-empty">Type to search {0} apps</div>
+      <div class="search-empty" id="search-empty">Type to search apps</div>
     </div>
   </div>
 
@@ -47,10 +46,7 @@ const isActive = (base: string) => path === base || (base !== '/' && path.starts
     <div class="footer-inner">
       <div class="footer-brand">
         <a href="/" class="footer-logo">🧩 SoftStack</a>
-        <p>Curated with care, shared with love — only free, legit, and genuinely useful GUI apps.</p>
-        <a href="https://github.com/billow/softstack" class="badge-awesome" target="_blank" rel="noopener" title="Built with the awesome manifesto in mind">
-          <img src="https://awesome.re/badge-flat.svg" alt="Awesome" width="88" height="20" loading="lazy" />
-        </a>
+        <p>Handpicked free, legit, and genuinely useful GUI apps. Every tool tested and vouched for.</p>
       </div>
       <div class="footer-links-group">
         <div class="footer-col">
@@ -71,7 +67,7 @@ const isActive = (base: string) => path === base || (base !== '/' && path.starts
         </div>
         <div class="footer-col">
           <h4>Support</h4>
-          <a href="https://github.com/billow/softstack/issues" target="_blank" rel="noopener">Help & Feedback</a>
+          <a href="mailto:support@softstack.cc">Help & Feedback</a>
         </div>
       </div>
     </div>
@@ -88,13 +84,11 @@ const isActive = (base: string) => path === base || (base !== '/' && path.starts
     const empty = document.getElementById('search-empty')!;
     const trigger = document.getElementById('search-trigger')!;
 
-    // Load index
     fetch('/search-index').then(r => r.json()).then(data => {
       apps = data;
       empty.textContent = `Type to search ${apps.length} apps`;
     });
 
-    // Open/close
     trigger.addEventListener('click', () => { overlay.classList.add('open'); setTimeout(() => input.focus(), 100); });
     overlay.addEventListener('click', (e) => { if (e.target === overlay) closeSearch(); });
     document.addEventListener('keydown', (e) => {
@@ -104,10 +98,8 @@ const isActive = (base: string) => path === base || (base !== '/' && path.starts
 
     function closeSearch() { overlay.classList.remove('open'); input.value = ''; results.innerHTML = ''; empty.style.display = ''; }
 
-    // Search
     const catNames = { productivity:'Productivity', developer:'Dev Tools', design:'Design', writing:'Writing', utility:'Utilities', media:'Media', communication:'Communication', security:'Security' };
-    const priceNames = { free:'Free', freemium:'Freemium', 'open-source':'Open Source' };
-    const plats = { mac:'', windows:'⊞', linux:'🐧', ios:'📱', android:'🤖', web:'🌐' };
+    const priceNames = { free:'Free', freemium:'Freemium', 'open-source':'Open Source', trial:'Trial' };
 
     input.addEventListener('input', () => {
       const q = input.value.toLowerCase().trim();
@@ -124,7 +116,7 @@ const isActive = (base: string) => path === base || (base !== '/' && path.starts
         <a href="/software/${a.slug}/" class="search-result">
           <span class="search-result-icon">${a.name.charAt(0)}</span>
           <div class="search-result-body">
-            <div class="search-result-name">${a.name} ${a.featured ? '<span class="scard-flag" style="font-size:.5rem;vertical-align:middle">Hot</span>' : ''}</div>
+            <div class="search-result-name">${a.name}</div>
             <div class="search-result-tagline">${a.tagline}</div>
             <div class="search-result-meta">
               <span class="badge badge-category">${catNames[a.category] || a.category}</span>

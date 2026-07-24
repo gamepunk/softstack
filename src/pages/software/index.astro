@@ -40,25 +40,25 @@ const perPage = 48;
   let activePlatform = new URLSearchParams(location.search).get('platform') || '';
 
   const catLabels = {productivity:'Productivity',developer:'Dev Tools',design:'Design',writing:'Writing',utility:'Utilities',media:'Media',communication:'Communication',security:'Security',other:'Other'};
-  const priceLabels = {free:'Free',freemium:'Freemium','open-source':'Open Source'};
+  const priceLabels = {free:'Free',freemium:'Freemium','open-source':'Open Source',trial:'Trial'};
   const pf = {mac:'fa-brands fa-apple',windows:'fa-brands fa-windows',linux:'fa-brands fa-linux',ios:'fa-brands fa-app-store-ios',android:'fa-brands fa-android',web:'fa-solid fa-globe'};
 
+  const catIcons = {productivity:'fa-solid fa-bolt',developer:'fa-solid fa-code',design:'fa-solid fa-palette',writing:'fa-solid fa-pen',utility:'fa-solid fa-toolbox',media:'fa-solid fa-play',communication:'fa-solid fa-comment',security:'fa-solid fa-shield',other:'fa-solid fa-ellipsis'};
+  const priceIcons = {free:'fa-solid fa-gift',freemium:'fa-solid fa-star-half-stroke','open-source':'fa-solid fa-code',trial:'fa-solid fa-clock'};
+
   function cardHTML(a) {
-    const pIcon = a.price === 'free' ? '<i class="fa-regular fa-face-smile"></i> ' : a.price === 'open-source' ? '<i class="fa-solid fa-code"></i> ' : '';
     return `<a href="/software/${a.slug}/" class="scard" data-platforms="${a.platforms.join(',')}">
+      ${a.featured ? '<span class="scard-flag" title="Featured pick"><i class="fa-solid fa-star"></i></span>' : ''}
       <div class="scard-icon">
         <span class="scard-fallback">${a.name.charAt(0)}</span>
-        ${a.featured ? '<span class="scard-flag" title="Featured pick"><i class="fa-solid fa-star"></i></span>' : ''}
       </div>
       <div class="scard-body">
         <div class="scard-top"><h3>${a.name}</h3></div>
         <p class="scard-desc">${a.tagline}</p>
         <div class="scard-meta">
-          <span class="badge badge-category">${catLabels[a.category] || a.category}</span>
-          <span class="badge badge-price">${pIcon}${priceLabels[a.price]}</span>
-        </div>
-        <div class="scard-platforms">
-          ${a.platforms.slice(0,4).map(p => `<i class="${pf[p]}"></i>`).join('')}
+          <span class="badge badge-category" title="${catLabels[a.category] || a.category}"><i class="${catIcons[a.category] || ''}"></i></span>
+          <span class="badge badge-price" title="${priceLabels[a.price] || a.price}"><i class="${priceIcons[a.price] || ''}"></i></span>
+          ${a.platforms.slice(0,3).map(p => `<span class="badge badge-platform" title="${p}"><i class="${pf[p] || ''}"></i></span>`).join('')}
         </div>
       </div>
     </a>`;
@@ -99,15 +99,17 @@ const perPage = 48;
     render();
   }
 
-  // Load index
+  // Load index — don't re-render on initial load, keep server-rendered cards
   fetch('/search-index').then(r => r.json()).then(data => {
     allApps = data;
+    filteredApps = activePlatform ? allApps.filter(a => a.platforms.includes(activePlatform)) : [...allApps];
+    document.getElementById('filter-count').textContent = String(filteredApps.length);
     if (activePlatform) {
       document.querySelectorAll('.filter-group[data-group="platform"] .filter-pill').forEach(b => {
         b.classList.toggle('active', b.dataset.value === activePlatform);
       });
     }
-    applyFilters();
+    if (activePlatform) applyFilters();
   });
 
   // Platform filter

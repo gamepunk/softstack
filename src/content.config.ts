@@ -12,7 +12,7 @@ const software = defineCollection({
     category: z.enum(['productivity','developer','design','writing','utility','media','communication','security','other']),
     platforms: z.array(z.enum(['mac','windows','linux','ios','android','web'])),
     type: z.enum(['gui','cli']).default('gui'),
-    price: z.enum(['free','freemium','open-source']),
+    price: z.enum(['free','freemium','open-source','trial']),
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
     logo: z.string().optional(),

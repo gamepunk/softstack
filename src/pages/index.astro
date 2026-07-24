@@ -26,14 +26,14 @@ const countByCat = (cat: string) => all.filter(p => p.data.category === cat).len
 
     <div class="content-area">
       <section class="hero">
-        <h1>Find the right tool for the job</h1>
-        <p>Only free, legit, and genuinely useful GUI apps. Every pick has been tested and vouched for.</p>
+        <h1>Find the right tool<br/>for the job</h1>
+        <p>Handpicked free, legit, and genuinely useful GUI apps. Every pick tested and vouched for.</p>
       </section>
 
       {featured.length > 0 && (
         <section class="section">
           <div class="section-header">
-            <h2><i class="fa-solid fa-star" style="color:var(--yellow);font-size:.9em;margin-right:8px"></i>Featured</h2>
+            <h2><i class="fa-solid fa-star" style="color:var(--yellow);font-size:.85em;margin-right:8px"></i>Featured</h2>
           </div>
           <div class="carousel-wrap">
             <button class="carousel-btn prev" id="feat-prev" aria-label="Scroll left"><i class="fa-solid fa-chevron-left"></i></button>
@@ -52,7 +52,7 @@ const countByCat = (cat: string) => all.filter(p => p.data.category === cat).len
         <div class="pill-group">
           {categories.map(c => (
             <a href={`/categories/${c}/`} class="pill">
-              <i class={categoryIcons[c]} style="font-size:.75rem"></i>
+              <i class={categoryIcons[c]}></i>
               {categoryNames[c]}
               <span class="count">{countByCat(c)}</span>
             </a>

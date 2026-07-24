@@ -4,26 +4,31 @@ type Entry = CollectionEntry<'software'>;
 interface Props { entry: Entry; }
 const { entry } = Astro.props;
 const { data, id } = entry;
-const priceLabels: Record<string, string> = { free:'Free', freemium:'Freemium', 'open-source':'Open Source' };
+const priceLabels: Record<string, string> = { free:'Free', freemium:'Freemium', 'open-source':'Open Source', trial:'Trial' };
 const categoryLabels: Record<string, string> = {
   productivity:'Productivity', developer:'Dev Tools', design:'Design', writing:'Writing',
   utility:'Utilities', media:'Media', communication:'Communication', security:'Security', other:'Other'
 };
+const categoryIcons: Record<string, string> = {
+  productivity:'fa-solid fa-bolt', developer:'fa-solid fa-code', design:'fa-solid fa-palette', writing:'fa-solid fa-pen',
+  utility:'fa-solid fa-toolbox', media:'fa-solid fa-play', communication:'fa-solid fa-comment', security:'fa-solid fa-shield', other:'fa-solid fa-ellipsis'
+};
+const platformNames: Record<string, string> = { mac:'macOS', windows:'Windows', linux:'Linux', ios:'iOS', android:'Android', web:'Web' };
 const platformIcons: Record<string, string> = {
-  mac: 'fa-brands fa-apple', windows: 'fa-brands fa-windows', linux: 'fa-brands fa-linux',
-  ios: 'fa-brands fa-app-store-ios', android: 'fa-brands fa-android', web: 'fa-solid fa-globe',
+  mac:'fa-brands fa-apple', windows:'fa-brands fa-windows', linux:'fa-brands fa-linux',
+  ios:'fa-brands fa-app-store-ios', android:'fa-brands fa-android', web:'fa-solid fa-globe',
 };
 const priceIcons: Record<string, string> = {
-  free: 'fa-solid fa-gift', 'open-source': 'fa-solid fa-code',
+  free:'fa-solid fa-gift', freemium:'fa-solid fa-star-half-stroke', 'open-source':'fa-solid fa-code', trial:'fa-solid fa-clock',
 };
 ---
 
 <a href={`/software/${id}/`} class="scard" data-platforms={data.platforms.join(',')}>
-  <div class="scard-icon">
+  {data.featured && <span class="scard-flag" title="Featured pick"><i class="fa-solid fa-star"></i></span>}
+  <div class={`scard-icon${data.logo ? ' has-logo' : ''}`}>
     {data.logo
-      ? <img src={data.logo} alt="" loading="lazy" width="56" height="56" />
+      ? <img src={data.logo} alt="" loading="lazy" width="64" height="64" />
       : <span class="scard-fallback">{data.name.charAt(0)}</span>}
-    {data.featured && <span class="scard-flag" title="Featured pick"><i class="fa-solid fa-star"></i></span>}
   </div>
   <div class="scard-body">
     <div class="scard-top">
@@ -31,15 +36,16 @@ const priceIcons: Record<string, string> = {
     </div>
     <p class="scard-desc">{data.tagline}</p>
     <div class="scard-meta">
-      <span class="badge badge-category">{categoryLabels[data.category] ?? data.category}</span>
-      <span class="badge badge-price">
-        <i class={priceIcons[data.price]}></i>
-        {priceLabels[data.price]}
+      <span class="badge badge-category" title={categoryLabels[data.category] ?? data.category}>
+        <i class={categoryIcons[data.category]}></i>
       </span>
-    </div>
-    <div class="scard-platforms">
-      {data.platforms.slice(0, 4).map(p => (
-        <i class={platformIcons[p]} title={p}></i>
+      <span class="badge badge-price" title={priceLabels[data.price]}>
+        <i class={priceIcons[data.price]}></i>
+      </span>
+      {data.platforms.slice(0, 3).map(p => (
+        <span class="badge badge-platform" title={platformNames[p]}>
+          <i class={platformIcons[p]}></i>
+        </span>
       ))}
     </div>
   </div>

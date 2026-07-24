@@ -19,5 +19,6 @@ type: gui
 price: open-source
 version: "5.2.0"
 download: https://download.blender.org/release/Blender5.2/blender-5.2.0-macos-arm64.dmg
+logo: /images/blender.png
 featured: true
 ---

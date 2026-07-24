@@ -14,5 +14,6 @@ type: gui
 price: freemium
 version: "1.31.1"
 download: https://releases.linear.app/Linear-1.31.1-universal.dmg
+logo: /images/linear.png
 featured: true
 ---
