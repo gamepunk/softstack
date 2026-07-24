@@ -15,4 +15,5 @@ price: freemium
 version: "1.104.23"
 download: https://releases.raycast.com/releases/1.104.23/download?build=arm
 featured: true
+logo: /images/raycast.png
 ---

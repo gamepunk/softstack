@@ -14,14 +14,14 @@ const platformIcons: Record<string, string> = {
   ios: 'fa-brands fa-app-store-ios', android: 'fa-brands fa-android', web: 'fa-solid fa-globe',
 };
 const priceIcons: Record<string, string> = {
-  free: 'fa-regular fa-face-smile', 'open-source': 'fa-solid fa-code',
+  free: 'fa-solid fa-gift', 'open-source': 'fa-solid fa-code',
 };
 ---
 
 <a href={`/software/${id}/`} class="scard" data-platforms={data.platforms.join(',')}>
   <div class="scard-icon">
     {data.logo
-      ? <img src={data.logo} alt="" loading="lazy" width="48" height="48" />
+      ? <img src={data.logo} alt="" loading="lazy" width="40" height="40" />
       : <span class="scard-fallback">{data.name.charAt(0)}</span>}
   </div>
   <div class="scard-body">
@@ -31,9 +31,13 @@ const priceIcons: Record<string, string> = {
     </div>
     <p class="scard-desc">{data.tagline}</p>
     <div class="scard-meta">
-      {data.platforms.map(p => <span class="badge badge-platform" title={p}><i class={platformIcons[p]}></i></span>)}
+      {data.platforms.slice(0, 3).map(p => (
+        <span class="badge badge-platform" title={p}>
+          <i class={platformIcons[p]}></i>
+        </span>
+      ))}
       <span class="badge badge-price">
-        {priceIcons[data.price] && <i class={priceIcons[data.price]}></i>}
+        <i class={priceIcons[data.price]}></i>
         {priceLabels[data.price]}
       </span>
       <span class="badge badge-category">{categoryLabels[data.category] ?? data.category}</span>

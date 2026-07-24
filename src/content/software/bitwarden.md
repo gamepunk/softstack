@@ -22,4 +22,5 @@ price: freemium
 version: "2026.6.1"
 download: https://github.com/bitwarden/clients/releases/download/desktop-v2026.6.1/Bitwarden-2026.6.1-universal.dmg
 featured: true
+logo: /images/bitwarden.jpg
 ---

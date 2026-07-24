@@ -4,52 +4,96 @@ import SoftwareCard from '../components/SoftwareCard.astro';
 import { getCollection } from 'astro:content';
 
 const categoryNames: Record<string, string> = {
-  productivity:'Productivity', developer:'Dev Tools', design:'Design', writing:'Writing',
+  productivity:'Productivity', developer:'Developer Tools', design:'Design', writing:'Writing',
   utility:'Utilities', media:'Media', communication:'Communication', security:'Security', other:'Other'
+};
+
+const categoryIcons: Record<string, string> = {
+  productivity:'fa-solid fa-bolt', developer:'fa-solid fa-code', design:'fa-solid fa-palette', writing:'fa-solid fa-pen',
+  utility:'fa-solid fa-toolbox', media:'fa-solid fa-play', communication:'fa-solid fa-comment', security:'fa-solid fa-shield', other:'fa-solid fa-ellipsis'
 };
 
 const all = (await getCollection('software')).filter(p => !p.data.draft && p.data.type === 'gui');
 const featured = all.filter(p => p.data.featured);
 const categories = [...new Set(all.map(p => p.data.category))].sort();
 const countByCat = (cat: string) => all.filter(p => p.data.category === cat).length;
+
+const platforms = ['mac', 'windows', 'linux', 'web'] as const;
+const platformNames: Record<string, string> = { mac:'macOS', windows:'Windows', linux:'Linux', web:'Web' };
+const platformIcons: Record<string, string> = { mac:'fa-brands fa-apple', windows:'fa-brands fa-windows', linux:'fa-brands fa-linux', web:'fa-solid fa-globe' };
+const countByPlatform = (p: string) => all.filter(s => s.data.platforms.includes(p as any)).length;
 ---
 
 <Layout title="SoftStack — Curated, Shared with Love" description="Handpicked free, legit, and genuinely useful GUI apps. Every tool has been tested and vouched for.">
-  <section class="hero">
-    <h1>Curated with care,<br/>shared with love.</h1>
-    <p>Only free, legit, and genuinely useful GUI apps. Every pick has been tested and vouched for — no pay-to-play, no filler.</p>
-  </section>
-
-  <section class="section">
-    <h2>Browse by Category</h2>
-    <div class="pill-group">
-      {categories.map(c => (
-        <a href={`/categories/${c}/`} class="pill">
-          {categoryNames[c] ?? c}
-          <span class="count">{countByCat(c)}</span>
+  <div class="main-layout">
+    <aside class="sidebar">
+      <nav class="sidebar-nav">
+        <div class="sidebar-title">Categories</div>
+        <a href="/software/" class="sidebar-link active">
+          <i class="fa-solid fa-layer-group"></i>
+          All Apps
+          <span class="sidebar-count">{all.length}</span>
         </a>
-      ))}
-    </div>
-  </section>
+        {categories.map(c => (
+          <a href={`/categories/${c}/`} class="sidebar-link">
+            <i class={categoryIcons[c]}></i>
+            {categoryNames[c]}
+            <span class="sidebar-count">{countByCat(c)}</span>
+          </a>
+        ))}
 
-  {featured.length > 0 && (
-    <section class="section">
-      <div class="section-header">
-        <h2>Featured</h2>
-      </div>
-      <div class="card-grid">
-        {featured.map(p => <SoftwareCard entry={p} />)}
-      </div>
-    </section>
-  )}
+        <div class="sidebar-title" style="margin-top:16px">Platforms</div>
+        {platforms.map(p => (
+          <a href={`/software/?platform=${p}`} class="sidebar-link">
+            <i class={platformIcons[p]}></i>
+            {platformNames[p]}
+            <span class="sidebar-count">{countByPlatform(p)}</span>
+          </a>
+        ))}
+      </nav>
+    </aside>
 
-  <section class="section">
-    <div class="section-header">
-      <h2>All Software</h2>
-      <a href="/software/">View all ({all.length}) →</a>
+    <div class="content-area">
+      <section class="hero">
+        <h1>Find the right tool for the job</h1>
+        <p>Only free, legit, and genuinely useful GUI apps. Every pick has been tested and vouched for.</p>
+      </section>
+
+      {featured.length > 0 && (
+        <section class="section">
+          <div class="section-header">
+            <h2>Featured</h2>
+          </div>
+          <div class="card-grid">
+            {featured.slice(0, 6).map(p => <SoftwareCard entry={p} />)}
+          </div>
+        </section>
+      )}
+
+      <section class="section">
+        <div class="section-header">
+          <h2>Browse by Category</h2>
+        </div>
+        <div class="pill-group">
+          {categories.map(c => (
+            <a href={`/categories/${c}/`} class="pill">
+              <i class={categoryIcons[c]} style="font-size:.75rem"></i>
+              {categoryNames[c]}
+              <span class="count">{countByCat(c)}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <h2>All Software</h2>
+          <a href="/software/">View all ({all.length}) →</a>
+        </div>
+        <div class="card-grid">
+          {all.slice(0, 12).map(p => <SoftwareCard entry={p} />)}
+        </div>
+      </section>
     </div>
-    <div class="card-grid">
-      {all.slice(0, 12).map(p => <SoftwareCard entry={p} />)}
-    </div>
-  </section>
+  </div>
 </Layout>
