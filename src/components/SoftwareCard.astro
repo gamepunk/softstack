@@ -21,26 +21,26 @@ const priceIcons: Record<string, string> = {
 <a href={`/software/${id}/`} class="scard" data-platforms={data.platforms.join(',')}>
   <div class="scard-icon">
     {data.logo
-      ? <img src={data.logo} alt="" loading="lazy" width="40" height="40" />
+      ? <img src={data.logo} alt="" loading="lazy" width="56" height="56" />
       : <span class="scard-fallback">{data.name.charAt(0)}</span>}
+    {data.featured && <span class="scard-flag" title="Featured pick"><i class="fa-solid fa-star"></i></span>}
   </div>
   <div class="scard-body">
     <div class="scard-top">
       <h3>{data.name}</h3>
-      {data.featured && <span class="scard-flag">Hot</span>}
     </div>
     <p class="scard-desc">{data.tagline}</p>
     <div class="scard-meta">
-      {data.platforms.slice(0, 3).map(p => (
-        <span class="badge badge-platform" title={p}>
-          <i class={platformIcons[p]}></i>
-        </span>
-      ))}
+      <span class="badge badge-category">{categoryLabels[data.category] ?? data.category}</span>
       <span class="badge badge-price">
         <i class={priceIcons[data.price]}></i>
         {priceLabels[data.price]}
       </span>
-      <span class="badge badge-category">{categoryLabels[data.category] ?? data.category}</span>
+    </div>
+    <div class="scard-platforms">
+      {data.platforms.slice(0, 4).map(p => (
+        <i class={platformIcons[p]} title={p}></i>
+      ))}
     </div>
   </div>
 </a>

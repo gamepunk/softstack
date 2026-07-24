@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import SoftwareCard from '../../components/SoftwareCard.astro';
 import FilterBar from '../../components/FilterBar.astro';
+import Sidebar from '../../components/Sidebar.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -25,18 +26,23 @@ const title = `${label} — SoftStack`;
 ---
 
 <Layout {title} description={`Handpicked ${(label as string).toLowerCase()} tools — free, legit, and genuinely useful.`}>
-  <nav class="breadcrumb">
-    <a href="/">Home</a> <span>/</span>
-    <a href="/categories/">Categories</a> <span>/</span>
-    {label}
-  </nav>
+  <div class="main-layout">
+    <Sidebar activeCategory={category} />
+    <div class="content-area">
+      <nav class="breadcrumb">
+        <a href="/">Home</a> <span>/</span>
+        <a href="/categories/">Categories</a> <span>/</span>
+        {label}
+      </nav>
 
-  <h1 style="margin-bottom:var(--gap-sm)">{label}</h1>
-  <p style="margin-bottom:var(--gap)"><span id="filter-count">{all.length}</span> handpicked apps</p>
+      <h1 style="margin-bottom:var(--gap-sm)">{label}</h1>
+      <p style="margin-bottom:var(--gap)"><span id="filter-count">{all.length}</span> handpicked apps</p>
 
-  <FilterBar />
+      <FilterBar />
 
-  <div class="card-grid">
-    {all.map(e => <SoftwareCard entry={e} />)}
+      <div class="card-grid">
+        {all.map(e => <SoftwareCard entry={e} />)}
+      </div>
+    </div>
   </div>
 </Layout>

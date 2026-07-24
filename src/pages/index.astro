@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import SoftwareCard from '../components/SoftwareCard.astro';
+import Sidebar from '../components/Sidebar.astro';
 import { getCollection } from 'astro:content';
 
 const categoryNames: Record<string, string> = {
@@ -17,41 +18,11 @@ const all = (await getCollection('software')).filter(p => !p.data.draft && p.dat
 const featured = all.filter(p => p.data.featured);
 const categories = [...new Set(all.map(p => p.data.category))].sort();
 const countByCat = (cat: string) => all.filter(p => p.data.category === cat).length;
-
-const platforms = ['mac', 'windows', 'linux', 'web'] as const;
-const platformNames: Record<string, string> = { mac:'macOS', windows:'Windows', linux:'Linux', web:'Web' };
-const platformIcons: Record<string, string> = { mac:'fa-brands fa-apple', windows:'fa-brands fa-windows', linux:'fa-brands fa-linux', web:'fa-solid fa-globe' };
-const countByPlatform = (p: string) => all.filter(s => s.data.platforms.includes(p as any)).length;
 ---
 
 <Layout title="SoftStack — Curated, Shared with Love" description="Handpicked free, legit, and genuinely useful GUI apps. Every tool has been tested and vouched for.">
   <div class="main-layout">
-    <aside class="sidebar">
-      <nav class="sidebar-nav">
-        <div class="sidebar-title">Categories</div>
-        <a href="/software/" class="sidebar-link active">
-          <i class="fa-solid fa-layer-group"></i>
-          All Apps
-          <span class="sidebar-count">{all.length}</span>
-        </a>
-        {categories.map(c => (
-          <a href={`/categories/${c}/`} class="sidebar-link">
-            <i class={categoryIcons[c]}></i>
-            {categoryNames[c]}
-            <span class="sidebar-count">{countByCat(c)}</span>
-          </a>
-        ))}
-
-        <div class="sidebar-title" style="margin-top:16px">Platforms</div>
-        {platforms.map(p => (
-          <a href={`/software/?platform=${p}`} class="sidebar-link">
-            <i class={platformIcons[p]}></i>
-            {platformNames[p]}
-            <span class="sidebar-count">{countByPlatform(p)}</span>
-          </a>
-        ))}
-      </nav>
-    </aside>
+    <Sidebar activeAll={true} />
 
     <div class="content-area">
       <section class="hero">
@@ -62,10 +33,14 @@ const countByPlatform = (p: string) => all.filter(s => s.data.platforms.includes
       {featured.length > 0 && (
         <section class="section">
           <div class="section-header">
-            <h2>Featured</h2>
+            <h2><i class="fa-solid fa-star" style="color:var(--yellow);font-size:.9em;margin-right:8px"></i>Featured</h2>
           </div>
-          <div class="card-grid">
-            {featured.slice(0, 6).map(p => <SoftwareCard entry={p} />)}
+          <div class="carousel-wrap">
+            <button class="carousel-btn prev" id="feat-prev" aria-label="Scroll left"><i class="fa-solid fa-chevron-left"></i></button>
+            <div class="carousel" id="feat-carousel">
+              {featured.map(p => <SoftwareCard entry={p} />)}
+            </div>
+            <button class="carousel-btn next" id="feat-next" aria-label="Scroll right"><i class="fa-solid fa-chevron-right"></i></button>
           </div>
         </section>
       )}
@@ -97,3 +72,14 @@ const countByPlatform = (p: string) => all.filter(s => s.data.platforms.includes
     </div>
   </div>
 </Layout>
+
+<script>
+  const track = document.getElementById('feat-carousel');
+  const prev = document.getElementById('feat-prev');
+  const next = document.getElementById('feat-next');
+  if (track && prev && next) {
+    const scrollBy = () => Math.min(track.clientWidth * 0.8, 600);
+    prev.addEventListener('click', () => track.scrollBy({ left: -scrollBy(), behavior: 'smooth' }));
+    next.addEventListener('click', () => track.scrollBy({ left: scrollBy(), behavior: 'smooth' }));
+  }
+</script>

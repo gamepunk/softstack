@@ -1,10 +1,15 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Sidebar from '../../components/Sidebar.astro';
 import { getCollection } from 'astro:content';
 
 const categoryNames: Record<string, string> = {
   productivity:'Productivity', developer:'Developer Tools', design:'Design', writing:'Writing',
   utility:'Utilities', media:'Media', communication:'Communication', security:'Security', other:'Other'
+};
+const categoryIcons: Record<string, string> = {
+  productivity:'fa-solid fa-bolt', developer:'fa-solid fa-code', design:'fa-solid fa-palette', writing:'fa-solid fa-pen',
+  utility:'fa-solid fa-toolbox', media:'fa-solid fa-play', communication:'fa-solid fa-comment', security:'fa-solid fa-shield', other:'fa-solid fa-ellipsis'
 };
 
 const all = await getCollection('software', ({ data }) => !data.draft && data.type === 'gui');
@@ -13,24 +18,39 @@ const counts = Object.fromEntries(categories.map(c => [c, all.filter(p => p.data
 ---
 
 <Layout title="Categories — SoftStack" description="Browse free, legit software by category.">
-  <nav class="breadcrumb">
-    <a href="/">Home</a> <span>/</span>
-    Categories
-  </nav>
+  <div class="main-layout">
+    <Sidebar />
+    <div class="content-area">
+      <nav class="breadcrumb">
+        <a href="/">Home</a> <span>/</span>
+        Categories
+      </nav>
 
-  <div class="hero" style="padding-top:var(--gap)">
-    <h1>Categories</h1>
-    <p>Find the right tool for the job.</p>
-  </div>
+      <section class="hero" style="padding-top:var(--gap-sm)">
+        <h1>Categories</h1>
+        <p>Find the right tool for the job.</p>
+      </section>
 
-  <div class="card-grid">
-    {categories.map(c => (
-      <a href={`/categories/${c}/`} class="card" style="text-decoration:none;color:var(--text)">
-        <div class="card-body" style="padding:var(--gap-lg)">
-          <h3 style="margin:0;font-size:1.1rem">{categoryNames[c] ?? c}</h3>
-          <p class="tagline" style="margin-top:.3rem">{counts[c]} {counts[c] === 1 ? 'tool' : 'tools'}</p>
-        </div>
-      </a>
-    ))}
+      <div class="cat-grid">
+        {categories.map(c => (
+          <a href={`/categories/${c}/`} class="cat-tile">
+            <div class="cat-tile-icon"><i class={categoryIcons[c]}></i></div>
+            <div>
+              <h3>{categoryNames[c] ?? c}</h3>
+              <p>{counts[c]} {counts[c] === 1 ? 'app' : 'apps'}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
   </div>
 </Layout>
+
+<style>
+  .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--gap)}
+  .cat-tile{display:flex;align-items:center;gap:var(--gap);padding:var(--gap-lg);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);text-decoration:none;color:var(--text);transition:box-shadow .18s,transform .18s}
+  .cat-tile:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px);color:var(--text);border-color:transparent}
+  .cat-tile-icon{width:52px;height:52px;border-radius:14px;background:var(--accent-subtle);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0}
+  .cat-tile h3{font-size:1rem;font-weight:500;margin-bottom:2px}
+  .cat-tile p{font-size:.8125rem;color:var(--text-tertiary)}
+</style>
