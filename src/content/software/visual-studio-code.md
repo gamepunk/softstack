@@ -13,6 +13,7 @@ price: open-source
 version: "1.130.0"
 download: https://update.code.visualstudio.com/1.130.0/darwin-arm64/stable
 featured: true
+logo: /images/visual-studio-code.png
 install:
   homebrew: brew install --cask visual-studio-code
   winget: winget install Microsoft.VisualStudioCode
