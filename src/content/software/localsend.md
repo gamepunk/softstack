@@ -21,5 +21,6 @@ type: gui
 price: open-source
 version: "1.17.0"
 download: https://github.com/localsend/localsend/releases/download/v1.17.0/LocalSend-1.17.0.dmg
+logo: /images/localsend.png
 featured: false
 ---

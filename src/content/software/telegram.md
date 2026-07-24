@@ -21,5 +21,6 @@ type: gui
 price: free
 version: "12.9,282555"
 download: https://osx.telegram.org/updates/Telegram-12.9.282555.app.zip
+logo: /images/telegram.png
 featured: false
 ---

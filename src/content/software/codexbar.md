@@ -12,5 +12,6 @@ type: gui
 price: open-source
 version: "0.45.2"
 download: https://github.com/steipete/CodexBar/releases/download/v0.45.2/CodexBar-macos-universal-0.45.2.zip
+logo: /images/codexbar.png
 featured: false
 ---

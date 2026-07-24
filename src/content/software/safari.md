@@ -8,5 +8,6 @@ category: productivity
 platforms: [mac]
 type: gui
 price: free
+logo: /images/safari.png
 featured: false
 ---

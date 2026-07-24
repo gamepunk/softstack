@@ -8,5 +8,7 @@ category: productivity
 platforms: [mac]
 type: gui
 price: free
+logo: /images/google-chrome.png
+logo: /images/google-chrome.png
 featured: false
 ---

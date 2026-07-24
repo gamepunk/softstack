@@ -15,5 +15,6 @@ type: gui
 price: open-source
 version: "1.4.4"
 download: https://dl.iina.io/IINA.v1.4.4.dmg
+logo: /images/iina.png
 featured: false
 ---

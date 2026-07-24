@@ -13,5 +13,6 @@ type: gui
 price: free
 version: "4.1.12.25,269337"
 download: https://dldir1.qq.com/weixin/Universal/Mac/xWeChatMac_universal_4.1.12.25_269337.dmg
+logo: /images/wechat.png
 featured: false
 ---

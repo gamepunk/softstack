@@ -10,5 +10,6 @@ category: developer
 platforms: [mac, windows, linux]
 type: gui
 price: free
+logo: /images/sublime-text.png
 featured: false
 ---

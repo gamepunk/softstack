@@ -19,5 +19,6 @@ type: gui
 price: open-source
 version: "9.11.0"
 download: https://download.calibre-ebook.com/9.11.0/calibre-9.11.0.dmg
+logo: /images/calibre.png
 featured: false
 ---

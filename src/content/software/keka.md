@@ -15,5 +15,6 @@ type: gui
 price: free
 version: "1.6.7"
 download: https://github.com/aonez/Keka/releases/download/v1.6.7/Keka-1.6.7.dmg
+logo: /images/keka.png
 featured: false
 ---

@@ -17,5 +17,6 @@ type: gui
 price: open-source
 version: "1.12.0"
 download: https://zed.dev/api/releases/stable/1.12.0/Zed-aarch64.dmg
+logo: /images/zed.png
 featured: false
 ---
